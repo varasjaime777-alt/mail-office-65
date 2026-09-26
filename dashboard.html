@@ -625,15 +625,31 @@
           body: JSON.stringify(updates)
         });
 
-        if (!res.ok) throw new Error('HTTP ' + res.status);
-
-        var result = await res.json();
-        config = { ...config, ...result };
-
         // Guardar en localStorage como fallback
         Object.keys(updates).forEach(function(k) {
           localStorage.setItem(k, updates[k]);
         });
+
+        if (res.status === 503) {
+          // GitHub token no configurado - se guardó localmente
+          hasUnsavedChanges = false;
+          saveBtn.textContent = saveBtn.dataset.originalText || 'Guardar cambios';
+          saveBtn.disabled = false;
+          setBadge('appearance', 'saved');
+          setBadge('discord', 'saved');
+          setBadge('content', 'saved');
+          document.getElementById('saveIndicator').textContent = '✓ Guardado localmente (configura GH_TOKEN para persistencia global)';
+          document.getElementById('saveIndicator').style.color = '#9a6700';
+          setTimeout(function() {
+            document.getElementById('saveIndicator').textContent = '';
+          }, 4000);
+          return;
+        }
+
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+
+        var result = await res.json();
+        config = { ...config, ...result };
 
         hasUnsavedChanges = false;
         saveBtn.textContent = saveBtn.dataset.originalText || 'Guardar cambios';
