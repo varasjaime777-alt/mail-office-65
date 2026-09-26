@@ -1,13 +1,11 @@
 {
   "version": 2,
-  "builds": [
-    {
-      "src": "/api/**/*.js",
-      "use": "@vercel/node"
+  "functions": {
+    "api/config.js": {
+      "runtime": "nodejs22.x"
     },
-    {
-      "src": "**/*",
-      "use": "@vercel/static"
+    "api/discord.js": {
+      "runtime": "nodejs22.x"
     }
-  ]
+  }
 }
