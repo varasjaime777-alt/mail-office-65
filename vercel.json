@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "outputDirectory": ".",
   "builds": [
     {
       "src": "api/config.js",
@@ -8,6 +9,30 @@
     {
       "src": "api/discord.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "index.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "password.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "payment.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "dashboard.html",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "config.json",
+      "use": "@vercel/static"
+    },
+    {
+      "src": "favicon.svg",
+      "use": "@vercel/static"
     }
   ]
 }
