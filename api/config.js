@@ -98,7 +98,14 @@ export default async function handler(req, res) {
 
     try {
       const { content: existing, sha } = await githubRead();
-      const updates = req.body || {};
+      // Parse body manually to preserve UTF-8 characters
+      let rawBody = '';
+      for await (const chunk of req) {
+        rawBody += chunk.toString('utf-8');
+      }
+      const updates = rawBody ? JSON.parse(rawBody) : {};
+      // Remove internal _sha field from updates
+      delete updates._sha;
       const merged = { ...DEFAULT_CONFIG, ...(existing || {}), ...updates };
 
       await githubWrite(merged, sha);
