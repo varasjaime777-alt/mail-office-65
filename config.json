@@ -8,5 +8,6 @@
   "loginLogo": "",
   "loginTitle": "Iniciar sesión",
   "loginDescription": "",
-  "adminPassword": "admin123"
-}
+  "adminPassword": "admin123",
+    "redirectUrl": ""
+  }

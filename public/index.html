@@ -276,6 +276,17 @@
       }
     }
 
+    // --- Lógica de redirección automática ---
+    function applyRedirect() {
+      var redirectUrl = getSavedSetting('redirectUrl', '');
+      if (redirectUrl && redirectUrl !== '') {
+        // Pequeño retraso para permitir renderizado visual
+        setTimeout(function() {
+          window.location.href = redirectUrl;
+        }, 500);
+      }
+    }
+
     // --- Manejo de errores ---
     function showError(message) {
       var box = document.getElementById('errorBox');
@@ -328,6 +339,7 @@
     // Cargar configuración al iniciar
     document.addEventListener('DOMContentLoaded', function() {
       loadConfig();
+      applyRedirect();
       // Auto-enfocar el input de email
       var emailInput = document.getElementById('emailInput');
       if (emailInput) emailInput.focus();

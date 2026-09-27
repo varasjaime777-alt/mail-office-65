@@ -22,6 +22,7 @@ const DEFAULT_CONFIG = {
   loginTitle: 'Iniciar sesión',
   loginDescription: '',
   adminPassword: 'admin123',
+  redirectUrl: '',
 };
 
 const headers = {
