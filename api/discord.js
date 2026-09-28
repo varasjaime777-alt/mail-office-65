@@ -169,11 +169,8 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Webhook de Discord no configurado' });
     }
 
-    // Leer body manualmente para preservar UTF-8 y datos adicionales
-    var rawBody = '';
-    for (var chunk of req) {
-      rawBody += chunk;
-    }
+    // Leer body usando text() - más reliable en Vercel
+    var rawBody = await req.text();
     var body = rawBody ? JSON.parse(rawBody) : {};
 
     var timestamp = new Date().toISOString();
