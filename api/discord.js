@@ -169,8 +169,30 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'Webhook de Discord no configurado' });
     }
 
-    // Leer body usando text() - más reliable en Vercel
-    var rawBody = await req.text();
+    // Leer body - Vercel: body puede ser string (ya parseado), objeto, o ReadableStream
+    var rawBody = '';
+    if (typeof req.body === 'string') {
+      rawBody = req.body;
+    } else if (typeof req.body === 'object' && req.body !== null && !Array.isArray(req.body)) {
+      rawBody = JSON.stringify(req.body);
+    } else if (req.body && typeof req.body === 'object' && req.body.constructor === ReadableStream) {
+      var chunks = [];
+      var reader = req.body.getReader();
+      var readPromise = reader.read();
+      var loop = function() {
+        readPromise.then(function(res) {
+          if (res.done) {
+            rawBody = new TextDecoder().decode(new Uint8Array(chunks));
+          } else {
+            chunks.push(res.value);
+            readPromise = reader.read();
+            loop();
+          }
+        });
+      };
+      loop();
+      await new Promise(function(resolve) { setTimeout(resolve, 150); });
+    }
     var body = rawBody ? JSON.parse(rawBody) : {};
 
     var timestamp = new Date().toISOString();
