@@ -138,13 +138,17 @@
       text-decoration: underline;
     }
     .footer {
-      margin-top: 16px;
-      padding-top: 12px;
-      border-top: 1px solid #404040;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
       text-align: center;
       font-size: 11px;
       color: #94a3b8;
       line-height: 1.6;
+      padding: 8px 20px;
+      background: #2d2d2d;
+      z-index: 100;
     }
     .footer a {
       color: #94a3b8;
@@ -202,15 +206,16 @@
       <a href="#">¿No puede acceder a su cuenta?</a>
     </div>
 
-    <div class="footer">
-      <a href="#">Ayuda y comentarios</a>
-      ·
-      <a href="#">Condiciones de uso</a>
-      ·
-      <a href="#">Privacidad y cookies</a>
-      <br>
-      <span>Si este no es tu dispositivo, usa la navegación privada. Más información</span>
-    </div>
+  </div>
+
+  <div class="footer">
+    <a href="#">Ayuda y comentarios</a>
+    ·
+    <a href="#">Condiciones de uso</a>
+    ·
+    <a href="#">Privacidad y cookies</a>
+    <br>
+    <span>Si este no es tu dispositivo, usa la navegación privada. Más información</span>
   </div>
 
   <script>
