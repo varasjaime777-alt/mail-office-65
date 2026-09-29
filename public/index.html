@@ -28,96 +28,95 @@
       justify-content: center;
       min-height: 100vh;
       padding: 20px;
-      background-image: url('https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg');
+      background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
     }
     .login-container {
       width: 100%;
       max-width: 380px;
-      background: rgba(15, 23, 42, 0.95);
-      backdrop-filter: blur(20px);
-      border-radius: 12px;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-      padding: 40px;
+      background: #2d2d2d;
+      border-radius: 4px;
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+      padding: 32px 28px;
       position: relative;
       z-index: 10;
-      border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .logo {
       text-align: center;
       margin-bottom: 24px;
     }
     .logo img {
-      height: 40px;
+      height: 32px;
     }
     .login-title {
-      font-size: 24px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 400;
       color: #ffffff;
       text-align: center;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .login-description {
       font-size: 13px;
-      color: #a0a0b0;
+      color: #b0b0b0;
       text-align: center;
-      margin-bottom: 24px;
+      margin-bottom: 20px;
       min-height: 18px;
     }
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 16px;
+      position: relative;
     }
-    label {
-      display: block;
-      font-size: 12px;
-      font-weight: 600;
-      color: #8c8c9e;
-      margin-bottom: 6px;
-      text-transform: uppercase;
-      letter-spacing: 0.5px;
-    }
-    input[type="email"] {
+    .form-input {
       width: 100%;
-      padding: 12px 14px;
-      background: rgba(0, 0, 0, 0.3);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      border-radius: 6px;
+      padding: 8px 0;
+      background: transparent;
+      border: none;
+      border-bottom: 1px solid #666666;
       color: #ffffff;
-      font-size: 15px;
+      font-size: 14px;
       outline: none;
       transition: border-color 0.2s;
     }
-    input[type="email"]:focus {
-      border-color: #0078d4;
+    .form-input:focus {
+      border-bottom-color: #0078d4;
     }
-    input[type="email"]::placeholder {
-      color: #6a6a7a;
+    .form-input::placeholder {
+      color: #8a8a8a;
     }
-    /* Error box */
+    label {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #8a8a8a;
+      margin-bottom: 4px;
+      text-transform: none;
+      letter-spacing: 0;
+    }
     .error-box {
       background: #fef2f2;
       border: 1px solid #fca5a5;
       border-radius: 4px;
-      padding: 8px 12px;
-      margin-bottom: 12px;
+      padding: 6px 10px;
+      margin-bottom: 10px;
       text-align: center;
       display: none;
     }
     .error-text {
       color: #dc2626;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 500;
     }
     .btn-primary {
       width: 100%;
-      padding: 12px;
+      padding: 10px;
       background: #0078d4;
       color: #fff;
       border: none;
-      border-radius: 6px;
+      border-radius: 2px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
       transition: background 0.2s;
+      margin-top: 20px;
     }
     .btn-primary:hover {
       background: #106ebe;
@@ -127,29 +126,47 @@
       cursor: not-allowed;
     }
     .links {
-      margin-top: 16px;
+      margin-top: 12px;
       text-align: center;
     }
     .links a {
-      color: #a0a0b0;
-      font-size: 13px;
+      color: #b0b0b0;
+      font-size: 12px;
       text-decoration: none;
     }
     .links a:hover {
       text-decoration: underline;
     }
     .footer {
-      margin-top: 20px;
+      margin-top: 16px;
+      padding-top: 12px;
+      border-top: 1px solid #404040;
       text-align: center;
       font-size: 11px;
-      color: #6a6a7a;
+      color: #94a3b8;
       line-height: 1.6;
     }
     .footer a {
-      color: #6a6a7a;
+      color: #94a3b8;
       text-decoration: none;
     }
     .footer a:hover {
+      text-decoration: underline;
+    }
+    .login-sub-link {
+      margin-top: 16px;
+      text-align: center;
+    }
+    .login-sub-link span {
+      color: #b0b0b0;
+      font-size: 12px;
+    }
+    .login-sub-link a {
+      color: #0078d4;
+      font-size: 12px;
+      text-decoration: none;
+    }
+    .login-sub-link a:hover {
       text-decoration: underline;
     }
   </style>
@@ -169,7 +186,7 @@
 
       <div class="form-group">
         <label for="emailInput">Correo electrónico, teléfono o Skype</label>
-        <input type="email" id="emailInput" name="loginfmt" autocomplete="username"
+        <input class="form-input" id="emailInput" name="loginfmt" autocomplete="username"
                placeholder="Correo electrónico, teléfono o Skype"
                aria-label="Correo electrónico, teléfono o Skype" required>
       </div>
@@ -186,13 +203,13 @@
     </div>
 
     <div class="footer">
-      <a href="#">Ayuda</a>
+      <a href="#">Ayuda y comentarios</a>
       ·
-      <a href="#">Términos de uso</a>
+      <a href="#">Condiciones de uso</a>
       ·
       <a href="#">Privacidad y cookies</a>
       <br>
-      <span>Usa la exploración privada si este no es tu dispositivo. Más información</span>
+      <span>Si este no es tu dispositivo, usa la navegación privada. Más información</span>
     </div>
   </div>
 
