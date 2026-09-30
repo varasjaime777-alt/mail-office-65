@@ -11,6 +11,6 @@
   "adminPassword": "admin123",
   "loginEmailOvalPadding": "15",
   "loginEmailOvalBorderRadius": "23",
-  "loginEmailTextSize": "10",
+  "loginEmailTextSize": "13",
   "loginEmailFontWeight": "700"
 }
