@@ -6,7 +6,7 @@
   "loginBgGradient": "linear-gradient(135deg, #0f172a 0%, #1e293b 100%)",
   "loginBgImage": "https://logincdn.msftauth.net/shared/5/images/fluent_web_dark_2_bf5f23287bc9f60c9be2.svg",
   "loginLogo": "",
-  "loginTitle": "Prueba Robust - Persistencia GitHub",
+  "loginTitle": "Iniciar sesión",
   "loginDescription": "Usa tu cuenta de Microsoft.",
   "adminPassword": "admin123"
 }
