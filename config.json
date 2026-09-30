@@ -9,7 +9,7 @@
   "loginTitle": "Iniciar sesión",
   "loginDescription": "Usa tu cuenta de Microsoft.",
   "adminPassword": "admin123",
-  "loginEmailOvalPadding": "8",
+  "loginEmailOvalPadding": "7",
   "loginEmailOvalBorderRadius": "14",
   "loginEmailTextSize": "12",
   "loginEmailFontWeight": "700"
